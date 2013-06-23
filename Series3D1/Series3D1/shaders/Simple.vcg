@@ -1,0 +1,7 @@
+
+void main( float4 in a_Position  : POSITION,
+		   float4 out v_Position : POSITION
+		   )
+{
+	v_Position = a_Position;
+}
