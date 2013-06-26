@@ -63,11 +63,11 @@ namespace Series3D1
 		
 		private static void SetUpVertices()
 		{
-			Vector3 v1 = new Vector3(-0.5f, -0.5f, 0.0f);
+			Vector3 v1 = new Vector3(0.0f, 0.0f, 0.0f);
 			
-			Vector3 v2 = new Vector3(0.0f, 0.5f, 0.0f);
+			Vector3 v2 = new Vector3(10.0f, 10.0f, 0.0f);
 			
-			Vector3 v3 = new Vector3(0.5f, -0.5f, 0.0f);
+			Vector3 v3 = new Vector3(10.0f, 0.0f, -5.0f);
 			
 			vArr = new Vector3[3]; 
 			vArr[0] = v1;
