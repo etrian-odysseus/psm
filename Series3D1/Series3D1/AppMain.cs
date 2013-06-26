@@ -17,7 +17,7 @@ namespace Series3D1
 		private static float[] colors = {
 				1.0f, 0.0f, 0.0f, 0.0f,
 				0.0f, 1.0f, 0.0f, 0.0f,
-				0.0f, 0.0f, 1.0f, 0.0f
+				1.0f, 1.0f, 0.0f, 0.0f
 		};
 		
 		private static VertexBuffer vBuffer;
@@ -51,7 +51,7 @@ namespace Series3D1
 		public static void Render ()
 		{
 			// Clear the screen
-			graphics.SetClearColor (0.0f, 0.5f, 1.0f, 0.0f);
+			graphics.SetClearColor (0.28f, 0.24f, 0.55f, 0.0f);
 			graphics.Clear ();
 			
 			graphics.SetShaderProgram(shader);
