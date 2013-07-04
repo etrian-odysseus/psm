@@ -2,9 +2,14 @@
 void main( float4 in a_Position  : POSITION,
 		   float4 in a_Color     : COLOR0,
 		   float4 out v_Position : POSITION,
-		   float4 out v_Color    : COLOR0
+		   float4 out v_Color    : COLOR0,
+		   uniform float4x4 u_viewMatrix,
+		   uniform float4x4 u_projMatrix,
+		   uniform float4x4 u_worldMatrix
 		   )
 {
-	v_Position = a_Position;
+	float4x4 preViewProjection = mul(u_viewMatrix, u_projMatrix);
+	float4x4 preWorldViewProjection = mul(u_worldMatrix, preViewProjection);
+	v_Position = mul(a_Position, preWorldViewProjection);
 	v_Color = a_Color;
 }
