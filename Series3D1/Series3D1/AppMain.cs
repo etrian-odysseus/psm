@@ -26,6 +26,7 @@ namespace Series3D1
 		
 		private static Matrix4 viewMatrix;
         private static Matrix4 projectionMatrix;
+		private static Matrix4 idMatrix;
 		
 		public static void Main (string[] args)
 		{
@@ -43,9 +44,10 @@ namespace Series3D1
 			// Set up the graphics system
 			graphics = new GraphicsContext ();
 			shader = new ShaderProgram("/Application/shaders/Simple.cgx");
-			shaderProgram.SetUniformBinding(0, "u_viewMatrix");
-			shaderProgram.SetUniformBinding(1, "u_projMatrix");
-			shaderProgram.SetUniformBinding(2, "u_WorldMatrix");
+			shader.SetUniformBinding(0, "u_viewMatrix");
+			shader.SetUniformBinding(1, "u_projMatrix");
+			shader.SetUniformBinding(2, "u_worldMatrix");
+			SetUpCamera();
 			SetUpVertices();
 			graphics.SetVertexBuffer(0, vBuffer);
 		}
@@ -61,20 +63,21 @@ namespace Series3D1
 			graphics.Clear ();
 			
 			graphics.SetShaderProgram(shader);
-			shaderProgram.SetUniformValue(0, ref viewMatrix);
-			shaderProgram.SetUniformValue(1, ref projectionMatrix);
-			shaderProgram.SetUniformValue(2, ref Matrix4.Identity);
+			shader.SetUniformValue(0, ref viewMatrix);
+			shader.SetUniformValue(1, ref projectionMatrix);
+			shader.SetUniformValue(2, ref idMatrix);
 			graphics.DrawArrays(DrawMode.Triangles, 0, 3);
 			
 			// Present the screen
 			graphics.SwapBuffers ();
 		}
 		
-		private void SetUpCamera()
+		private static void SetUpCamera()
          {
-             viewMatrix = Matrix4.LookAt(new Vector3(0, 0, 50), new Vector3(0, 0, 0), new Vector3(0, 1, 0));
-             projectionMatrix = Matrix4.Perspective(FMath.PI/4, graphics.GetViewport, 1.0f, 300.0f);
-         }
+            viewMatrix = Matrix4.LookAt(new Vector3(0, 0, 50), new Vector3(0, 0, 0), new Vector3(0, 1, 0));
+            projectionMatrix = Matrix4.Perspective(FMath.PI/4, (float)graphics.GetViewport().Width/(float)graphics.GetViewport().Height, 1.0f, 300.0f);
+        	idMatrix = Matrix4.Identity; 
+		}
 		
 		private static void SetUpVertices()
 		{
