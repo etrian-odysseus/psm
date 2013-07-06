@@ -26,7 +26,9 @@ namespace Series3D1
 		
 		private static Matrix4 viewMatrix;
         private static Matrix4 projectionMatrix;
-		private static Matrix4 idMatrix;
+		private static Matrix4 worldMatrix;
+		
+		private static float angle = 0f;
 		
 		public static void Main (string[] args)
 		{
@@ -54,6 +56,7 @@ namespace Series3D1
 
 		public static void Update ()
 		{
+			angle += 0.005f;
 		}
 
 		public static void Render ()
@@ -62,10 +65,14 @@ namespace Series3D1
 			graphics.SetClearColor (0.28f, 0.24f, 0.55f, 0.0f);
 			graphics.Clear ();
 			
+			Vector3 rotAxis = new Vector3(3*angle, angle, 2*angle);
+ 			rotAxis.Normalize();
+ 			worldMatrix = Matrix4.Translation(-20.0f/3.0f, -10.0f / 3.0f, 0) * Matrix4.RotationAxis(rotAxis, angle);
+			
 			graphics.SetShaderProgram(shader);
 			shader.SetUniformValue(0, ref viewMatrix);
 			shader.SetUniformValue(1, ref projectionMatrix);
-			shader.SetUniformValue(2, ref idMatrix);
+			shader.SetUniformValue(2, ref worldMatrix);
 			graphics.DrawArrays(DrawMode.Triangles, 0, 3);
 			
 			// Present the screen
@@ -75,8 +82,7 @@ namespace Series3D1
 		private static void SetUpCamera()
          {
             viewMatrix = Matrix4.LookAt(new Vector3(0, 0, 50), new Vector3(0, 0, 0), new Vector3(0, 1, 0));
-            projectionMatrix = Matrix4.Perspective(FMath.PI/4, (float)graphics.GetViewport().Width/(float)graphics.GetViewport().Height, 1.0f, 300.0f);
-        	idMatrix = Matrix4.Identity; 
+            projectionMatrix = Matrix4.Perspective(FMath.PI/4, (float)graphics.GetViewport().Width/(float)graphics.GetViewport().Height, 1.0f, 300.0f); 
 		}
 		
 		private static void SetUpVertices()
