@@ -15,14 +15,18 @@ namespace Series3D1
 		private static ShaderProgram shader;
 		
 		private static float[] colors = {
-				1.0f, 0.0f, 0.0f, 0.0f,
-				0.0f, 1.0f, 0.0f, 0.0f,
-				1.0f, 1.0f, 0.0f, 0.0f
+				1.0f, 1.0f, 1.0f, 0.0f,
+				1.0f, 1.0f, 1.0f, 0.0f,
+				1.0f, 1.0f, 1.0f, 0.0f,
+			    1.0f, 1.0f, 1.0f, 0.0f,
+			    1.0f, 1.0f, 1.0f, 0.0f
 		};
 		
 		private static VertexBuffer vBuffer;
 		
 		private static Vector3[] vArr;
+		
+		private static ushort[] indices;
 		
 		private static Matrix4 viewMatrix;
         private static Matrix4 projectionMatrix;
@@ -50,6 +54,7 @@ namespace Series3D1
 			shader.SetUniformBinding(1, "u_projMatrix");
 			shader.SetUniformBinding(2, "u_worldMatrix");
 			SetUpCamera();
+			SetUpIndices();
 			SetUpVertices();
 			graphics.SetVertexBuffer(0, vBuffer);
 		}
@@ -65,15 +70,15 @@ namespace Series3D1
 			graphics.SetClearColor (0.28f, 0.24f, 0.55f, 0.0f);
 			graphics.Clear ();
 			
-			Vector3 rotAxis = new Vector3(3*angle, angle, 2*angle);
- 			rotAxis.Normalize();
- 			worldMatrix = Matrix4.Translation(-20.0f/3.0f, -10.0f / 3.0f, 0) * Matrix4.RotationAxis(rotAxis, angle);
-			
+			//Vector3 rotAxis = new Vector3(3*angle, angle, 2*angle);
+ 			//rotAxis.Normalize();
+ 			//worldMatrix = Matrix4.Translation(-20.0f/3.0f, -10.0f / 3.0f, 0) * Matrix4.RotationAxis(rotAxis, angle);
+			worldMatrix = Matrix4.Identity;
 			graphics.SetShaderProgram(shader);
 			shader.SetUniformValue(0, ref viewMatrix);
 			shader.SetUniformValue(1, ref projectionMatrix);
 			shader.SetUniformValue(2, ref worldMatrix);
-			graphics.DrawArrays(DrawMode.Triangles, 0, 3);
+			graphics.DrawArrays(DrawMode.Triangles, 0, 5);
 			
 			// Present the screen
 			graphics.SwapBuffers ();
@@ -81,7 +86,7 @@ namespace Series3D1
 		
 		private static void SetUpCamera()
          {
-            viewMatrix = Matrix4.LookAt(new Vector3(0, 0, 50), new Vector3(0, 0, 0), new Vector3(0, 1, 0));
+            viewMatrix = Matrix4.LookAt(new Vector3(0, 50, 0), new Vector3(0, 0, 0), new Vector3(0, 0, -1));
             projectionMatrix = Matrix4.Perspective(FMath.PI/4, (float)graphics.GetViewport().Width/(float)graphics.GetViewport().Height, 1.0f, 300.0f); 
 		}
 		
@@ -89,18 +94,37 @@ namespace Series3D1
 		{
 			Vector3 v1 = new Vector3(0.0f, 0.0f, 0.0f);
 			
-			Vector3 v2 = new Vector3(10.0f, 10.0f, 0.0f);
+			Vector3 v2 = new Vector3(5.0f, 0.0f, 0.0f);
 			
-			Vector3 v3 = new Vector3(10.0f, 0.0f, -5.0f);
+			Vector3 v3 = new Vector3(10.0f, 0.0f, 0.0f);
 			
-			vArr = new Vector3[3]; 
+			Vector3 v4 = new Vector3(5.0f, 0.0f, -5.0f);
+			
+			Vector3 v5 = new Vector3(10.0f, 0.0f, -5.0f);
+			
+			vArr = new Vector3[5]; 
 			vArr[0] = v1;
 			vArr[1] = v2;
 			vArr[2] = v3;
+			vArr[3] = v4;
+			vArr[4] = v5;
 			
-			vBuffer = new VertexBuffer(3, VertexFormat.Float3, VertexFormat.Float4);
+			vBuffer = new VertexBuffer(5, 6, VertexFormat.Float3, VertexFormat.Float4);
 			vBuffer.SetVertices(0, vArr);
 			vBuffer.SetVertices(1, colors);
+			vBuffer.SetIndices(indices);
+		}
+		
+		private static void SetUpIndices()
+		{
+			indices = new ushort[6];
+			
+			indices[0] = 3;
+            indices[1] = 1;
+            indices[2] = 0;
+            indices[3] = 4;
+            indices[4] = 2;
+            indices[5] = 1;
 		}
 	}
 }
